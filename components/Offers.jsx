@@ -17,8 +17,7 @@ const Offers = () => {
   if (!sortedOffersForDuration.length && !loading) return null;
 
   return (
-    <div className="flex flex-col items-center gap-10 pb-20">
-      {/* Duration Selection */}
+    <div className="flex flex-col items-center gap-10 pb-32">
       <div className="flex gap-2">
         {[1, 3, 6, 9, 12].map((duration) => (
           <DurationButton
@@ -40,7 +39,7 @@ const Offers = () => {
             selected={selectedOfferId === offer.id}
             isFirst={index === 0} // Pass isFirst prop for custom border styling
           >
-            <span className="text-4xl font-thin sm:text-5xl">
+            <span className="text-4xl font-thin lg:text-5xl">
               <span className="font-black">{offer.price.toFixed(2)}</span> &euro;
             </span>
             <div className="flex h-full items-center justify-center">

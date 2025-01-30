@@ -6,8 +6,8 @@ import Button3D from './Button3D';
 
 const InputForm = () => {
   const { setCarDataValues, clearCarData, loading } = useCarRegistrationContext();
-  const [reg, setReg] = useState('');
-  const [vin, setVin] = useState('');
+  const [reg, setReg] = useState('BJ8614');
+  const [vin, setVin] = useState('AF2984030');
   const [collapsed, setCollapsed] = useState(false);
   const [isRowLayout, setIsRowLayout] = useState(false);
 
@@ -25,8 +25,8 @@ const InputForm = () => {
     height: collapsed
       ? 0
       : isRowLayout
-        ? 120 // Smaller height for flex-row layout
-        : 220, // Default height for flex-col layout
+        ? 140 // Smaller height for flex-row layout
+        : 240, // Default height for flex-col layout
     opacity: collapsed ? 0 : 1,
     overflow: 'hidden',
   });
@@ -44,7 +44,7 @@ const InputForm = () => {
   };
 
   return (
-    <div className="flex flex-col gap-7 p-5">
+    <div className="flex flex-col p-5">
       <animated.div style={animationStyle} className="w-full">
         <div
           className={`mx-auto mt-2 flex w-full max-w-md flex-col items-center gap-5 ${isRowLayout ? 'md:max-w-xl md:flex-row' : ''}`}

@@ -30,8 +30,11 @@ export const CarRegistrationProvider = ({ children }) => {
       setLoading(true);
       setError(null);
 
+      const endpoint = process.env.NEXT_PUBLIC_SERVER_URL || '';
+      console.log(endpoint);
+
       try {
-        const response = await fetch(`/api/auto`, {
+        const response = await fetch(`${endpoint}/api/auto`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(carData),
@@ -60,6 +63,8 @@ export const CarRegistrationProvider = ({ children }) => {
         .map((company) => ({
           id: company.id,
           price: company.prices[octaDuration.toString()],
+          logo: company.logo,
+          duration: octaDuration,
         }))
         .sort((a, b) => a.price - b.price);
 
