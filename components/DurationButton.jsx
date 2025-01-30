@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import { useSpring, animated } from '@react-spring/web';
 import { useCarRegistrationContext } from '@/context/CarRegistrationContext';
 
 const DurationButton = ({ duration, isSelected, onClick }) => {
@@ -24,31 +25,42 @@ const DurationButton = ({ duration, isSelected, onClick }) => {
         ? 'border-blue-700' // Dark mode blue border
         : 'border-[#222222]';
 
+  // React Spring animation for button press effect
+  const animationStyle = useSpring({
+    transform: isSelected ? 'translateY(3px)' : 'translateY(0px)',
+    boxShadow: isSelected
+      ? '0px 0px 0px #eeeeee, 0px 0px 0px #eeeeee' // Pressed state (flat)
+      : '0px 4px 0px #eeeeee, 0px 6px 0px #eeeeee', // Default 3D effect (light)
+    config: { tension: 250, friction: 15, duration: 100 },
+  });
+
+  const animationStyleDark = useSpring({
+    transform: isSelected ? 'translateY(3px)' : 'translateY(0px)',
+    boxShadow: isSelected
+      ? '0px 0px 0px #222222, 0px 0px 0px #222222' // Pressed state (flat)
+      : '0px 4px 0px #222222, 0px 6px 0px #222222', // Default 3D effect (dark)
+    config: { tension: 250, friction: 15, duration: 100 },
+  });
+
   return (
     <>
       {/* Light Mode Button */}
-      <button
+      <animated.button
         onClick={() => onClick(duration)}
-        className={`relative flex h-12 w-12 items-center justify-center rounded-full border border-b-[1px] bg-background text-lg font-semibold transition-all duration-150 ${borderColor} ${
-          isSelected
-            ? 'translate-y-1 [box-shadow:0_0px_0_0_#eeeeee,0_0px_0_0_#eeeeee]' // Selected effect (pressed)
-            : '[box-shadow:0_4px_0_0_#eeeeee,0_6px_0_0_#eeeeee]'
-        } dark:hidden`}
+        style={animationStyle}
+        className={`relative flex h-12 w-12 items-center justify-center rounded-full border border-b-[1px] bg-background text-lg font-semibold transition-all duration-150 ${borderColor} dark:hidden`}
       >
         {duration}
-      </button>
+      </animated.button>
 
       {/* Dark Mode Button */}
-      <button
+      <animated.button
         onClick={() => onClick(duration)}
-        className={`relative hidden h-12 w-12 items-center justify-center rounded-full border border-b-[1px] bg-background text-lg font-semibold transition-all duration-150 ${borderColorDark} ${
-          isSelected
-            ? 'translate-y-1 [box-shadow:0_0px_0_0_#222222,0_0px_0_0_#222222]' // Selected effect (pressed)
-            : '[box-shadow:0_4px_0_0_#222222,0_6px_0_0_#222222] active:translate-y-1 active:[box-shadow:0_0px_0_0_#222222,0_0px_0_0_#222222]'
-        } dark:flex`}
+        style={animationStyleDark}
+        className={`relative hidden h-12 w-12 items-center justify-center rounded-full border border-b-[1px] bg-background text-lg font-semibold transition-all duration-150 ${borderColorDark} dark:flex`}
       >
         {duration}
-      </button>
+      </animated.button>
     </>
   );
 };
