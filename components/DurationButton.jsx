@@ -30,7 +30,7 @@ const DurationButton = ({ duration, isSelected, onClick }) => {
     transform: isSelected ? 'translateY(3px)' : 'translateY(0px)',
     boxShadow: isSelected
       ? '0px 0px 0px #eeeeee, 0px 0px 0px #eeeeee' // Pressed state (flat)
-      : '0px 4px 0px #eeeeee, 0px 6px 0px #eeeeee', // Default 3D effect (light)
+      : '0px 3px 0px #eeeeee, 0px 3px 0px #eeeeee', // Default 3D effect (light)
     config: { tension: 250, friction: 15, duration: 100 },
   });
 
