@@ -14,7 +14,7 @@ const Button3D = ({ children, onClick, checked = false, selected = false, isFirs
         className={`button relative flex w-full cursor-pointer select-none flex-col items-center justify-start gap-10 rounded-lg border border-b-[1px] bg-background p-5 transition-all duration-150 ${
           checked
             ? 'translate-y-2 [box-shadow:0_0px_0_0_#eeeeee,0_0px_0_0_#eeeeee]'
-            : '[box-shadow:0_5px_0_0_#eeeeee,0_8px_0_0_#eeeeee] active:translate-y-2 active:[box-shadow:0_0px_0_0_#eeeeee,0_0px_0_0_#eeeeee]'
+            : '[box-shadow:0_5px_0_0_#eeeeee,0_8px_0_0_#eeeeee]'
         } ${borderColor} dark:hidden`}
       >
         {isFirst && (

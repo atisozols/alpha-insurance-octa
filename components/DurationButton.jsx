@@ -32,7 +32,7 @@ const DurationButton = ({ duration, isSelected, onClick }) => {
         className={`relative flex h-12 w-12 items-center justify-center rounded-full border border-b-[1px] bg-background text-lg font-semibold transition-all duration-150 ${borderColor} ${
           isSelected
             ? 'translate-y-1 [box-shadow:0_0px_0_0_#eeeeee,0_0px_0_0_#eeeeee]' // Selected effect (pressed)
-            : '[box-shadow:0_4px_0_0_#eeeeee,0_6px_0_0_#eeeeee] active:translate-y-1 active:[box-shadow:0_0px_0_0_#eeeeee,0_0px_0_0_#eeeeee]'
+            : '[box-shadow:0_4px_0_0_#eeeeee,0_6px_0_0_#eeeeee]'
         } dark:hidden`}
       >
         {duration}
