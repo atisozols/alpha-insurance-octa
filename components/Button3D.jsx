@@ -14,7 +14,7 @@ const Button3D = ({ children, onClick, checked = false, selected = false, isFirs
     transform: checked ? 'translateY(5px)' : 'translateY(0px)',
     boxShadow: checked
       ? '0px 0px 0px #eeeeee, 0px 0px 0px #eeeeee' // Pressed state (flat)
-      : '0px 5px 0px #eeeeee, 0px 8px 0px #eeeeee', // Default 3D effect
+      : '0px 5px 0px #eeeeee, 0px 5px 0px #eeeeee', // Default 3D effect
     config: { tension: 250, friction: 15, duration: 100 },
   });
 
@@ -23,7 +23,7 @@ const Button3D = ({ children, onClick, checked = false, selected = false, isFirs
     transform: checked ? 'translateY(5px)' : 'translateY(0px)',
     boxShadow: checked
       ? '0px 0px 0px #222222, 0px 0px 0px #222222' // Pressed state (flat)
-      : '0px 5px 0px #222222, 0px 8px 0px #222222', // Default 3D effect
+      : '0px 5px 0px #222222, 0px 5px 0px #222222', // Default 3D effect
     config: { tension: 250, friction: 15, duration: 100 },
   });
 
