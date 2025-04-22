@@ -78,7 +78,7 @@ const InputForm = () => {
         </div>
       </animated.div>
 
-      <button disabled={loading} className="mx-auto max-w-xl font-bold">
+      <button disabled={loading} className="mx-auto max-w-xl">
         {collapsed ? (
           <Button3D onClick={handleButtonClick} checked={true}>
             <div className="flex w-52 items-center justify-center gap-2 text-sm sm:w-96 sm:text-lg">

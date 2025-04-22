@@ -48,19 +48,19 @@ const DurationButton = ({ duration, isSelected, onClick }) => {
       <animated.button
         onClick={() => onClick(duration)}
         style={animationStyle}
-        className={`relative flex h-12 w-12 items-center justify-center rounded-full border border-b-[1px] bg-background text-lg font-semibold transition-all duration-150 ${borderColor} dark:hidden`}
+        className={`relative flex h-12 w-12 items-center justify-center rounded-full border border-b-[1px] bg-background text-lg font-semibold transition-all duration-150 ${borderColor}`}
       >
         {duration}
       </animated.button>
 
       {/* Dark Mode Button */}
-      <animated.button
+      {/* <animated.button
         onClick={() => onClick(duration)}
         style={animationStyleDark}
         className={`relative hidden h-12 w-12 items-center justify-center rounded-full border border-b-[1px] bg-background text-lg font-semibold transition-all duration-150 ${borderColorDark} dark:flex`}
       >
         {duration}
-      </animated.button>
+      </animated.button> */}
     </>
   );
 };

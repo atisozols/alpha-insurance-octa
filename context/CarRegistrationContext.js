@@ -1,65 +1,84 @@
 'use client';
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { validateCarRegistration, validateCheckout } from '@/utils/validation';
 
 const CarRegistrationContext = createContext();
 
 export const CarRegistrationProvider = ({ children }) => {
   const [carData, setCarData] = useState({ reg: '', vin: '' });
+  const [phone, setPhone] = useState({ country_code: '+371', number: '' });
+  const [email, setEmail] = useState('');
   const [octaDuration, setOctaDuration] = useState(1);
-  const [companies, setCompanies] = useState([]);
+  const [companies, setCompanies] = useState({});
   const [sortedOffersForDuration, setSortedOffersForDuration] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loadingCompanies, setLoadingCompanies] = useState({});
   const [error, setError] = useState(null);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [checkoutError, setCheckoutError] = useState('');
   const [selectedOfferId, setSelectedOfferId] = useState(null);
+
+  const companyIds = process.env.NEXT_PUBLIC_INSURANCE_COMPANIES.split(',');
 
   const setCarDataValues = (reg, vin) => {
     setCarData({ reg, vin });
+    setCompanies({});
+    setSortedOffersForDuration([]);
   };
 
   const clearCarData = () => {
     setCarData({ reg: '', vin: '' });
-    setCompanies([]);
+    setCompanies({});
     setSortedOffersForDuration([]);
     setSelectedOfferId(null);
+    setEmail('');
+    setCheckoutError('');
   };
 
   useEffect(() => {
-    const fetchCompanies = async () => {
-      if (!carData.reg || !carData.vin) return;
+    if (!carData.reg || !carData.vin) return;
 
-      setLoading(true);
-      setError(null);
+    const { error: validationError } = validateCarRegistration(carData);
+    if (validationError) {
+      setError(validationError.details[0].message);
+      return;
+    }
 
-      const endpoint = process.env.NEXT_PUBLIC_SERVER_URL || '';
-      console.log(endpoint);
+    setError(null);
+
+    const fetchCompanyData = async (companyId) => {
+      setLoadingCompanies((prev) => ({ ...prev, [companyId]: true }));
 
       try {
-        const response = await fetch(`${endpoint}/api/auto`, {
+        const endpoint = process.env.NEXT_PUBLIC_SERVER_URL;
+        const response = await fetch(`${endpoint}/api/auto/${companyId}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(carData),
         });
 
+        const data = await response.json();
+
         if (!response.ok) {
-          throw new Error(`Error: ${response.statusText}`);
+          throw new Error(data.message || `Error fetching ${companyId}`);
         }
 
-        const data = await response.json();
-        setCompanies(data);
+        setCompanies((prev) => ({ ...prev, [companyId]: data }));
       } catch (err) {
-        console.error('Error fetching companies:', err);
-        setError(err.message);
+        console.error(`Error fetching ${companyId}:`, err);
+        setError(err.message); // Store the backend error message in context
       } finally {
-        setLoading(false);
+        setLoadingCompanies((prev) => ({ ...prev, [companyId]: false }));
       }
     };
 
-    fetchCompanies();
+    companyIds.forEach((companyId) => {
+      if (!companies[companyId]) fetchCompanyData(companyId);
+    });
   }, [carData]);
 
   useEffect(() => {
-    if (companies.length > 0) {
-      const sorted = companies
+    if (Object.keys(companies).length > 0) {
+      const sorted = Object.values(companies)
         .map((company) => ({
           id: company.id,
           price: company.prices[octaDuration.toString()],
@@ -72,20 +91,80 @@ export const CarRegistrationProvider = ({ children }) => {
     }
   }, [companies, octaDuration]);
 
+  const handleCheckout = async () => {
+    const sanitizedPhone = {
+      country_code: phone.country_code.replace('+', ''),
+      number: phone.number,
+    };
+
+    const { error } = validateCheckout({
+      carData,
+      email,
+      phone: sanitizedPhone,
+      selectedOfferId,
+      octaDuration,
+    });
+
+    if (error) {
+      setCheckoutError(error.details[0].message);
+      return;
+    } else {
+      setCheckoutError('');
+    }
+
+    try {
+      setCheckoutLoading(true);
+      const endpoint = process.env.NEXT_PUBLIC_SERVER_URL;
+      const response = await fetch(`${endpoint}/api/payment/create`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          carData,
+          email,
+          phone: sanitizedPhone,
+          selectedOfferId,
+          octaDuration,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || `Neizdevās veikt maksājumu`);
+      }
+      setCheckoutLoading(false);
+      window.location.href = data.paymentLink;
+    } catch (error) {
+      setCheckoutError(error.message);
+      setCheckoutLoading(false);
+    }
+
+    console.log({ carData, email, phone: sanitizedPhone, selectedOfferId, octaDuration });
+  };
+
   return (
     <CarRegistrationContext.Provider
       value={{
         carData,
+        phone,
+        setPhone,
+        email,
+        setEmail,
         octaDuration,
         companies,
         sortedOffersForDuration,
-        loading,
+        loadingCompanies,
         error,
+        checkoutError,
+        checkoutLoading,
+        setCheckoutLoading,
+        setCheckoutError,
         selectedOfferId,
         setSelectedOfferId,
         setCarDataValues,
         clearCarData,
         setOctaDuration,
+        handleCheckout,
       }}
     >
       {children}

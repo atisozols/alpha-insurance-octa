@@ -3,11 +3,22 @@ import { useSpring, animated } from '@react-spring/web';
 import { useCarRegistrationContext } from '@/context/CarRegistrationContext';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import countryCodes from '@/utils/countryCodes';
 
 const CheckoutButton = () => {
-  const { selectedOfferId, sortedOffersForDuration } = useCarRegistrationContext();
-  const [showButton, setShowButton] = useState(false);
+  const {
+    email,
+    setEmail,
+    checkoutLoading,
+    phone,
+    setPhone,
+    checkoutError,
+    selectedOfferId,
+    sortedOffersForDuration,
+    handleCheckout,
+  } = useCarRegistrationContext();
 
+  const [showButton, setShowButton] = useState(false);
   const selectedOffer = sortedOffersForDuration.find((offer) => offer.id === selectedOfferId);
 
   useEffect(() => {
@@ -34,27 +45,76 @@ const CheckoutButton = () => {
   return (
     <animated.div
       style={animationStyle}
-      className="fixed inset-x-0 bottom-0 border-t border-t-[#eeeeee] bg-background p-5 text-lg sm:px-10 md:text-xl dark:border-t-[#222222]"
-      onClick={() => console.log(`Proceeding with offer: ${selectedOfferId}`)}
+      className="fixed inset-x-0 bottom-0 flex flex-col gap-5 border-t border-t-[#eeeeee] bg-background p-5 text-lg sm:px-10 md:flex-row md:text-xl"
     >
-      <div className="mx-auto flex max-w-5xl flex-col items-center justify-center sm:justify-between md:flex-row">
-        <div className="flex w-full max-w-xs items-center justify-between gap-5 md:justify-normal">
+      <div className="mx-auto flex w-full max-w-5xl flex-col items-center justify-center sm:justify-between md:flex-row">
+        <div className="flex w-full max-w-xs items-center justify-between gap-5 md:max-w-lg md:justify-normal">
           <Image
             src={selectedOffer.logo}
             alt={`${selectedOffer.id} logo`}
             width={100}
             height={100}
-            className="h-12 w-auto dark:invert"
+            className="h-12 w-auto"
           />
-          <div className="">
+          <div className="w-full text-right">
             {selectedOffer.duration} {selectedOffer.duration === 1 ? 'mēnesis' : 'mēneši'}:{' '}
-            <span className="font-semibold">{selectedOffer.price} €</span>
+            <span className="whitespace-nowrap font-semibold">
+              {selectedOffer.price.toFixed(2)} €
+            </span>
           </div>
         </div>
+      </div>
+
+      {/* Phone Input Field */}
+      <div className="mx-auto flex w-full max-w-xs flex-col gap-2 md:ml-auto">
+        <div className="flex gap-2">
+          <select
+            className="w-28 rounded-md border bg-transparent p-3 text-lg"
+            value={phone.country_code}
+            onChange={(e) => setPhone({ ...phone, country_code: e.target.value })}
+            name="tel-country-code"
+            autoComplete="tel-country-code"
+          >
+            {countryCodes.map((country) => (
+              <option key={country.code} value={country.dial_code}>
+                {country.emoji} {country.dial_code}
+              </option>
+            ))}
+          </select>
+
+          <input
+            type="tel"
+            placeholder="Tālruņa numurs"
+            className="w-full rounded-md border bg-transparent p-3 text-lg"
+            value={phone.number}
+            onChange={(e) => setPhone({ ...phone, number: e.target.value })}
+            name="tel"
+            autoComplete="tel"
+          />
+        </div>
+
+        {/* Email Input Field */}
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Ievadiet e-pastu"
+          className="w-full rounded-md border bg-transparent p-3 text-lg"
+          name="email"
+          autoComplete="email"
+        />
+
+        {checkoutError && <p className="py-1 text-center text-sm text-red-500">{checkoutError}</p>}
+
+        {/* Payment Button */}
         <button
-          className={`mt-3 w-full max-w-xs cursor-pointer rounded-lg p-3 text-center font-semibold text-white md:mt-0 ${bgColor} ${bgColorDark}`}
+          disabled={checkoutLoading}
+          onClick={handleCheckout}
+          className={`w-full max-w-xs cursor-pointer rounded-lg p-3 text-center font-semibold text-white md:mt-0 ${
+            checkoutError ? 'bg-gray-400' : `${bgColor} ${bgColorDark}`
+          }`}
         >
-          Apmaksāt
+          {checkoutLoading ? <span className="loading loading-sm"></span> : 'Apmaksāt'}
         </button>
       </div>
     </animated.div>

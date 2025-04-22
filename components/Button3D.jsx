@@ -33,7 +33,7 @@ const Button3D = ({ children, onClick, checked = false, selected = false, isFirs
       <animated.div
         onClick={onClick}
         style={animationStyle}
-        className={`button relative flex w-full cursor-pointer select-none flex-col items-center justify-start gap-10 rounded-lg border border-b-[1px] bg-background p-5 transition-all duration-150 ${borderColor} dark:hidden`}
+        className={`button relative flex w-full cursor-pointer select-none flex-col items-center justify-start gap-10 rounded-lg border border-b-[1px] bg-background p-5 transition-all duration-150 ${borderColor}`}
       >
         {isFirst && (
           <span className="absolute -top-3 translate-x-0 rounded-xl bg-emerald-300 p-1 px-2 text-xs font-semibold">
@@ -43,7 +43,7 @@ const Button3D = ({ children, onClick, checked = false, selected = false, isFirs
         {children}
       </animated.div>
 
-      {/* Dark Mode Button */}
+      {/* Dark Mode Button
       <animated.div
         onClick={onClick}
         style={animationStyleDark}
@@ -55,7 +55,7 @@ const Button3D = ({ children, onClick, checked = false, selected = false, isFirs
           </span>
         )}
         {children}
-      </animated.div>
+      </animated.div> */}
     </>
   );
 };

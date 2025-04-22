@@ -5,6 +5,7 @@ import './globals.css';
 const inter = Inter({
   variable: '--font-inter',
   subsets: ['latin'],
+  weight: ['variable'],
 });
 
 export const metadata = {
@@ -17,7 +18,7 @@ export default function Layout({ children }) {
     <html lang="en">
       <CarRegistrationProvider>
         <body className={`${inter.variable} min-h-screen bg-background antialiased`}>
-          <div className="mx-auto w-full max-w-5xl">{children}</div>
+          <div className="mx-auto w-full max-w-5xl pb-40">{children}</div>
         </body>
       </CarRegistrationProvider>
     </html>
