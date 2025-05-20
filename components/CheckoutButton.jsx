@@ -110,11 +110,11 @@ const CheckoutButton = () => {
         <button
           disabled={checkoutLoading}
           onClick={handleCheckout}
-          className={`w-full max-w-xs cursor-pointer rounded-lg p-3 text-center font-semibold text-white md:mt-0 ${
+          className={`flex w-full max-w-xs cursor-pointer items-center justify-center rounded-lg p-3 text-center text-base font-semibold text-white md:mt-0 ${
             checkoutError ? 'bg-gray-400' : `${bgColor} ${bgColorDark}`
           }`}
         >
-          {checkoutLoading ? <span className="loading loading-sm"></span> : 'Apmaksāt'}
+          {checkoutLoading ? <span className="loading"></span> : 'Apmaksāt'}
         </button>
       </div>
     </animated.div>

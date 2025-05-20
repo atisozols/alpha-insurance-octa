@@ -6,8 +6,8 @@ import Button3D from './Button3D';
 
 const InputForm = () => {
   const { setCarDataValues, clearCarData, loading } = useCarRegistrationContext();
-  const [reg, setReg] = useState('BJ8614');
-  const [vin, setVin] = useState('AF2984030');
+  const [reg, setReg] = useState('MI7134');
+  const [vin, setVin] = useState('AF3819164');
   const [collapsed, setCollapsed] = useState(false);
   const [isRowLayout, setIsRowLayout] = useState(false);
 

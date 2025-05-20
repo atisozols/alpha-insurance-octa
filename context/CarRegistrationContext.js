@@ -59,13 +59,15 @@ export const CarRegistrationProvider = ({ children }) => {
         const data = await response.json();
 
         if (!response.ok) {
-          throw new Error(data.message || `Error fetching ${companyId}`);
+          // The error message from backend already contains the company name
+          console.warn(data.message || `Error fetching data`);
+        } else {
+          setCompanies((prev) => ({ ...prev, [companyId]: data }));
         }
-
-        setCompanies((prev) => ({ ...prev, [companyId]: data }));
       } catch (err) {
-        console.error(`Error fetching ${companyId}:`, err);
-        setError(err.message); // Store the backend error message in context
+        // Log error without adding company name again since it's already in the error message
+        console.error(err);
+        // Error is only logged to console, not set in state
       } finally {
         setLoadingCompanies((prev) => ({ ...prev, [companyId]: false }));
       }
